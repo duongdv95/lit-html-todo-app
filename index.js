@@ -1,6 +1,7 @@
 import { LitElement, html} from 'lit-element' 
 import './add-todo.js'
 import './view-todo.js'
+import './styles/style.scss'
 
 class App extends LitElement {
 	createRenderRoot() {
