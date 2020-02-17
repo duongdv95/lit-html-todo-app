@@ -4,12 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "es-dev-server --watch --node-resolve --open",
+    "webpack-dev": "webpack --mode development --watch",
+    "webpack-build": "webpack --mode production"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lit-html": "^1.1.2"
+    "lit-element": "^2.2.1",
+    "lit-html": "^1.1.2",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "es-dev-server": "^1.40.0",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11"
   }
 }

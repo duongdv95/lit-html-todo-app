@@ -1,70 +1,64 @@
-import { html, render } from './node_modules/lit-html/lit-html.js'
+import { LitElement, html} from 'lit-element' 
+import './add-todo.js'
+import './view-todo.js'
 
-let todos = [
-	{ title: 'test 1', completed: false },
-	{ title: 'test 2', completed: true },
-	{ title: 'test 3', completed: false },
-	{ title: 'test 4', completed: true },
-	{ title: 'test 5', completed: false },
-];
+class App extends LitElement {
+	createRenderRoot() {
+		return this;
+	}
 
-let handleAddTodo = (e) => {
-	if (e.key !== 'Enter') return
-	todos = [...todos, {
-		title: e.target.value,
-		completed: false
-	}]
+	static get properties() {
+		return {
+			todos: Array
+		}
+	}
 
-	e.target.value = ''
-	
-	update()
-}
+	constructor() {
+		super();
+		
+		this.todos = [
+			{ title: 'Buy Groceries', completed: false },
+			{ title: 'Walk the dog', completed: true },
+			{ title: 'Meal prep for the week', completed: false },
+			{ title: 'Go to the gym', completed: true },
+			{ title: 'Feed the dog', completed: false },
+		]
+		
+	}
 
-let addTodo = () => html`
-	<input 
-		class="new-todo" 
-		placeholder="What needs to be done?"
-		autofocus="" 
-		@keyup="${handleAddTodo}"
-		/>
-`
-
-let handleToggleCompletion = (todo) => { 
-	todos = todos.map(t => {
-			return (t !== todo) ? t : 
-			{
-				...todo,
-				completed: !todo.completed
-			}
-		})
-}
-
-let viewTodo = (todo) => html`
-	<li>
-		<div class="view">
-			<input class="toggle" type="checkbox" ?checked="${todo.completed}" @click="${(e) => handleToggleCompletion(todo)}"/>
-			<label>${todo.title}</label>
-		</div>
-	</li>
-`
-
-let app = () => html`
-	<section class="todoapp">
-		<header class="header">
-			<h1>todos</h1>
-			${addTodo()}
-		</header>
-
-		<section class="main">
-			<ul class="todo-list">
-				${todos.map((todo) => viewTodo(todo))}
-			</ul>
+	render() {
+		return html`
+		<section class="todoapp">
+			<header class="header">
+				<h1>todosss</h1>
+				<add-todo .addTodo="${(todo) => this.addTodo(todo)}"></add-todo>
+			</header>
+			<section class="main">
+				<ul class="todo-list">
+          ${this.todos.map((todo) => html`
+            <view-todo .todo="${todo}" .toggleCompletion="${(todo) => this.toggleCompletion(todo)}" ></view-todo>
+          `)}
+				</ul>
+			</section>
 		</section>
-	</section>
-`
-let update = () => {
-	render(app(), document.body) 
-	console.log(todos);
+		`
+  }
+
+  toggleCompletion (todo) { 
+    this.todos = this.todos.map(t => {
+        return (t !== todo) ? t : 
+        {
+          ...todo,
+          completed: !todo.completed
+        }
+      })
+      console.table(this.todos)
+    }
+    
+    addTodo(todo) {
+      this.todos = [...this.todos, todo]
+      console.table(this.todos)
+	}
 }
 
-update()
+window.customElements.define("todo-app", App)
